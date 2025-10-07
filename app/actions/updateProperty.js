@@ -1,13 +1,12 @@
 "use server";
 
-import cloudinary from "@/config/cloudinary";
 import connectDB from "@/config/database";
 import Property from "@/model/Property";
 import getSessionUser from "@/utils/getSessionUser";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-async function addProperty(formData) {
+async function updateProperty(propertyId, formData) {
   try {
     await connectDB();
 
@@ -18,8 +17,12 @@ async function addProperty(formData) {
 
     const { userId } = userSession;
 
-    const amenities = formData.getAll("amenities");
-    const images = formData.getAll("images").filter((image) => image !== "");
+    //find the property with the passed id
+    const existingProperty = await Property.findById(propertyId);
+    // check weather the property belong to the login user or not
+    if (existingProperty.owner.toString() !== userId) {
+      throw new Error("Unauthorized to edit this property data");
+    }
 
     const propertyData = {
       owner: userId,
@@ -35,7 +38,7 @@ async function addProperty(formData) {
       beds: formData.get("beds"),
       baths: formData.get("baths"),
       square_feet: formData.get("square_feet"),
-      amenities,
+      amenities: formData.getAll("amenities"),
       rates: {
         nightly: formData.get("rates.nightly"),
         weekly: formData.get("rates.weekly"),
@@ -47,47 +50,22 @@ async function addProperty(formData) {
         phone: formData.get("seller_info.phone"),
       },
     };
+    const updatedProperty = await Property.findByIdAndUpdate(
+      propertyId,
+      propertyData,
+    );
 
-    const imageUrls = [];
-
-    console.log(` Uploading ${images.length} images...`);
-
-    for (const imageFile of images) {
-      const imageBuffer = await imageFile.arrayBuffer();
-      const imageArray = Array.from(new Uint8Array(imageBuffer));
-      const imageData = Buffer.from(imageArray);
-      const imageBase64 = imageData.toString("base64");
-
-      const result = await cloudinary.uploader.upload(
-        `data:image/png;base64,${imageBase64}`,
-        {
-          folder: "property-nextjs-project",
-        },
-      );
-
-      imageUrls.push(result.secure_url);
-    }
-
-    propertyData.images = imageUrls;
-
-    const newProperty = new Property(propertyData);
-    await newProperty.save();
-
+    //revalidate the data
     revalidatePath("/", "layout");
 
-    redirect(`/properties/${newProperty._id}`);
+    redirect(`/properties/${updatedProperty._id}`);
   } catch (error) {
-    //  FIX — allow Next.js redirect to happen normally
-    if (
-      error.message === "NEXT_REDIRECT" ||
-      error.digest?.startsWith("NEXT_REDIRECT")
-    ) {
+    if (error.digest?.startsWith("NEXT_REDIRECT")) {
       throw error;
     }
-
-    console.error(" Error in addProperty:", error);
-    throw new Error(`Failed to add property: ${error.message}`);
+    console.error("something went wrong:", error);
+    throw error;
   }
 }
 
-export default addProperty;
+export default updateProperty;

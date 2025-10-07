@@ -1,32 +1,38 @@
-import PropertyDetails from "@/components/PropertyDetails";
 import PropertyHeaderImage from "@/components/PropertyHeaderImage";
-import PropertyImages from "@/components/PropertyImages";
+import PropertyDetails from "@/components/PropertyDetails";
 import connectDB from "@/config/database";
 import Property from "@/model/Property";
-import { convertToSerializableObject } from "@/utils/convertToObject";
+import PropertyImages from "@/components/PropertyImages";
+import BookmarkButton from "@/components/BookmarkButton";
+import ShareButtons from "@/components/ShareButton";
+import PropertyContactForm from "@/components/PropertyContactForm";
+import { convertToSerializeableObject } from "@/utils/convertToObject";
+
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa";
 
-async function PropertyPage({ params }) {
-  const paramsValue = await params;
+const PropertyPage = async ({ params }) => {
+  // const paramsValue = await params;
+  const { id } = params;
   await connectDB();
-  const propertyDoc = await Property.findById(paramsValue.id).lean();
-  const property = convertToSerializableObject(propertyDoc);
+  const propertyDoc = await Property.findById(id).lean();
+  const property = convertToSerializeableObject(propertyDoc);
+
   if (!property) {
     return (
-      <h2 className="mt-10 text-center text-2xl font-bold">
+      <h1 className="mt-10 text-center text-2xl font-bold">
         Property Not Found
-      </h2>
+      </h1>
     );
   }
+
   return (
     <>
-      <PropertyHeaderImage image={property?.images?.[0]} />
-
+      <PropertyHeaderImage image={property.images[0]} />
       <section>
         <div className="container m-auto px-6 py-6">
           <Link
-            href="/"
+            href="/properties"
             className="flex items-center text-blue-500 hover:text-blue-600"
           >
             <FaArrowLeft className="mr-2" /> Back to Properties
@@ -37,12 +43,18 @@ async function PropertyPage({ params }) {
         <div className="container m-auto px-6 py-10">
           <div className="md:grid-cols-70/30 grid w-full grid-cols-1 gap-6">
             <PropertyDetails property={property} />
+
+            {/* <!-- Sidebar --> */}
+            <aside className="space-y-4">
+              <BookmarkButton property={property} />
+              <ShareButtons property={property} />
+              <PropertyContactForm property={property} />
+            </aside>
           </div>
         </div>
       </section>
       <PropertyImages images={property.images} />
     </>
   );
-}
-
+};
 export default PropertyPage;
