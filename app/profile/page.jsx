@@ -4,7 +4,7 @@ import getSessionUser from "@/utils/getSessionUser";
 import defaultProfileImg from "@/assets/images/profile.png";
 import Property from "@/model/Property";
 import ProfileProperties from "@/components/ProfileProperties";
-import { convertToSerializableObject } from "@/utils/convertToObject";
+import { convertToSerializeableObject } from "@/utils/convertToObject";
 
 async function ProfilePage() {
   await connectDB();
@@ -15,7 +15,7 @@ async function ProfilePage() {
     throw new Error("User id is requirexd");
   }
   const propertiesDoc = await Property.find({ owner: userId }).lean();
-  const properties = propertiesDoc.map(convertToSerializableObject);
+  const properties = propertiesDoc.map(convertToSerializeableObject);
   //   console.log("USER PROPERTIES:", properties);
 
   return (

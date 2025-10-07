@@ -1,76 +1,3 @@
-// "use client";
-
-// import { useEffect, useState } from "react";
-// import { fromAddress, setDefaults } from "react-geocode";
-// import "mapbox-gl/dist/mapbox-gl.css";
-
-// import { Map, Marker } from "react-map-gl";
-
-// import pin from "@/assets/images/pin.svg";
-// import Spinner from "./Spinner";
-// import Image from "next/image";
-
-// function PropertyMap({ property }) {
-//   const [lat, setLat] = useState(null);
-//   const [lng, setLng] = useState(null);
-//   const [loading, setLoading] = useState(true);
-//   const [geoCodeError, setGeoCodeError] = useState(false);
-
-//   setDefaults({
-//     key: process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY,
-//     language: "en",
-//     region: "us",
-//   });
-
-//   useEffect(() => {
-//     const fetchCoords = async () => {
-//       try {
-//         const res = await fromAddress(
-//           `${property.location.street} ${property.location.city} ${property.location.state} ${property.location.zipcode}`,
-//         );
-
-//         if (res.results.length === 0) {
-//           setGeoCodeError(true);
-//           return;
-//         }
-
-//         const { lat, lng } = res.results[0].geometry.location;
-//         setLat(lat);
-//         setLng(lng);
-//       } catch (error) {
-//         console.error("Error:", error);
-//         setGeoCodeError(true);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-//     fetchCoords();
-//   }, [property]);
-
-//   if (loading) return <Spinner />;
-//   if (geoCodeError)
-//     return <div className="text-2xl">No location data found</div>;
-
-//   return (
-//     <Map
-//       mapboxAccessToken={process.env.NEXT_PUBLIC_GOOGLE_MAP_API_KEY}
-//       initialViewState={{
-//         longitude: lng,
-//         latitude: lat,
-//         zoom: 15,
-//       }}
-//       style={{ width: "100%", height: 500 }}
-//       mapStyle="mapbox://styles/mapbox/streets-v9"
-//     >
-//       <Marker longitude={lng} latitude={lat} anchor="bottom">
-//         <Image src={pin} width={40} height={40} alt="location" />
-//       </Marker>
-//     </Map>
-//   );
-// }
-
-// export default PropertyMap;
-
 "use client";
 import { useEffect, useState } from "react";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -83,32 +10,27 @@ import Spinner from "./Spinner";
 const PropertyMap = ({ property }) => {
   const [lat, setLat] = useState(null);
   const [lng, setLng] = useState(null);
-  const [viewport, setViewport] = useState({
-    latitude: 0,
-    longitude: 0,
-    zoom: 12,
-    width: "100%",
-    height: "500px",
-  });
   const [loading, setLoading] = useState(true);
   const [geocodeError, setGeocodeError] = useState(false);
-
-  setDefaults({
-    key: process.env.NEXT_PUBLIC_GOOGLE_GEOCODING_API_KEY,
-    language: "en",
-    region: "us",
-  });
+  // console.log("ENV:", process.env);
+  console.log("GEO MAP api:", process.env.NEXT_PUBLIC_GOOGLE_GEOCODING_API_KEY);
 
   useEffect(() => {
+    // Set geocoding defaults
+    setDefaults({
+      key: process.env.NEXT_PUBLIC_GOOGLE_GEOCODING_API_KEY,
+      language: "en",
+      region: "us",
+    });
+
     const fetchCoords = async () => {
       try {
         const res = await fromAddress(
           `${property.location.street} ${property.location.city} ${property.location.state} ${property.location.zipcode}`,
         );
 
-        //  Check for results
+        // Check for results
         if (res.results.length === 0) {
-          // No results found
           setGeocodeError(true);
           setLoading(false);
           return;
@@ -118,12 +40,6 @@ const PropertyMap = ({ property }) => {
 
         setLat(lat);
         setLng(lng);
-        setViewport({
-          ...viewport,
-          latitude: lat,
-          longitude: lng,
-        });
-
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -133,32 +49,38 @@ const PropertyMap = ({ property }) => {
     };
 
     fetchCoords();
-  }, []);
+  }, [property.location]);
 
-  if (loading) return <Spinner loading={loading} />;
+  if (loading) {
+    return <Spinner loading={loading} />;
+  }
 
   if (geocodeError) {
     return <div className="text-xl">No location data found</div>;
   }
 
+  // Only render map when we have valid coordinates
+  if (!lat || !lng) {
+    return <div className="text-xl">Invalid coordinates</div>;
+  }
+
   return (
-    !loading && (
+    <div style={{ width: "100%", height: "500px" }}>
       <Map
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
-        mapLib={import("mapbox-gl")}
         initialViewState={{
           longitude: lng,
           latitude: lat,
           zoom: 15,
         }}
-        style={{ width: "100%", height: 500 }}
-        mapStyle="mapbox://styles/mapbox/streets-v9"
+        style={{ width: "100%", height: "100%" }}
+        mapStyle="mapbox://styles/mapbox/streets-v12"
       >
         <Marker longitude={lng} latitude={lat} anchor="bottom">
           <Image src={pin} alt="location" width={40} height={40} />
         </Marker>
       </Map>
-    )
+    </div>
   );
 };
 

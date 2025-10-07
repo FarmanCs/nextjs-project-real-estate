@@ -15,10 +15,12 @@ const userSchema = new Schema(
     image: {
       type: String,
     },
-    bookmarks: {
-      type: Schema.Types.ObjectId,
-      ref: "property",
-    },
+    bookmarks: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Property",
+      },
+    ],
   },
   { timestamps: true },
 );
