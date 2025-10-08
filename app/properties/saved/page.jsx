@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import PropertyCard from "@/components/PropertyCard";
 import User from "@/model/User";
 import getSessionUser from "@/utils/getSessionUser";

@@ -1,8 +1,9 @@
+export const dynamic = "force-dynamic";
+
 import PropertyCard from "@/components/PropertyCard";
 import connectDB from "@/config/database";
 import Property from "@/model/Property";
 import getSessionUser from "@/utils/getSessionUser";
-import mongoose from "mongoose";
 
 async function PropertiesPage() {
   await connectDB();

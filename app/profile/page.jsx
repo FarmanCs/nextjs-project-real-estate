@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import Image from "next/image";
 import connectDB from "@/config/database";
 import getSessionUser from "@/utils/getSessionUser";
