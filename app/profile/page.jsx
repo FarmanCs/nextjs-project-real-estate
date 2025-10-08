@@ -5,14 +5,15 @@ import defaultProfileImg from "@/assets/images/profile.png";
 import Property from "@/model/Property";
 import ProfileProperties from "@/components/ProfileProperties";
 import { convertToSerializeableObject } from "@/utils/convertToObject";
+import { redirect } from "next/navigation";
 
 async function ProfilePage() {
   await connectDB();
   const userSession = await getSessionUser();
   const { userId } = userSession;
 
-  if (!userId) {
-    throw new Error("User id is requirexd");
+  if (!userSession || !userSession.userId) {
+    redirect("/login"); // redirects unauthenticated users
   }
   const propertiesDoc = await Property.find({ owner: userId }).lean();
   const properties = propertiesDoc.map(convertToSerializeableObject);
