@@ -1,5 +1,9 @@
 export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  content: [
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
   theme: {
     extend: {
       colors: {
@@ -31,7 +35,6 @@ export default {
           700: "var(--color-red-700)",
           800: "var(--color-red-800)",
         },
-        // Add any other colors from your CSS here
       },
       boxShadow: {
         sm: "var(--shadow-sm)",
@@ -44,9 +47,11 @@ export default {
         md: "var(--border-radius-md)",
         lg: "var(--border-radius-lg)",
       },
-      fontfamily: {
+      fontFamily: {
         sans: ["Poppins", "sans-serif"],
-        gridTempletcolumns: { "70/30": "70% 28%" },
+      },
+      gridTemplateColumns: {
+        "70/30": "70% 28%",
       },
     },
   },

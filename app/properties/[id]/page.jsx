@@ -41,11 +41,14 @@ const PropertyPage = async ({ params }) => {
       </section>
       <section className="bg-blue-50">
         <div className="container m-auto px-6 py-10">
-          <div className="md:grid-cols-70/30 grid w-full grid-cols-1 gap-6">
-            <PropertyDetails property={property} />
+          <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-3">
+            {/* Main content - takes 2 columns on md and lg screens */}
+            <div className="md:col-span-2">
+              <PropertyDetails property={property} />
+            </div>
 
-            {/* <!-- Sidebar --> */}
-            <aside className="space-y-4">
+            {/* Sidebar - takes 1 column on md and lg screens */}
+            <aside className="space-y-6">
               <BookmarkButton property={property} />
               <ShareButtons property={property} />
               <PropertyContactForm property={property} />

@@ -17,13 +17,13 @@ async function PropertiesPage() {
     );
   }
   const { userId } = userSession;
-  console.log("User ID:", userId);
+
   // const properties = await Property.find({}).lean();
   const properties = await Property.find({ owner: userId }).lean();
   // const properties = await Property.find({
   //   owner: new mongoose.Types.ObjectId(userId),
   // }).lean();
-  console.log("properties:", properties);
+  // console.log("properties:", properties);
   if (!properties) {
     return (
       <h1 className="mt-4 text-center text-2xl">No data found for this User</h1>
