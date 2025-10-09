@@ -7,7 +7,7 @@ import { convertToSerializeableObject } from "@/utils/convertToObject";
 import getSessionUser from "@/utils/getSessionUser";
 
 async function MessagesPage() {
-  connectDB();
+  await connectDB();
   const { userId } = await getSessionUser();
   const readMessage = await Message.find({ recipient: userId, read: true })
     .sort({
