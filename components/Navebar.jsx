@@ -7,6 +7,7 @@ import { FaGoogle } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { signIn, signOut, getProviders, useSession } from "next-auth/react";
+import UnreadMessageCount from "./UnreadMessageCount";
 function Navebar() {
   const { data: session } = useSession();
 
@@ -139,10 +140,7 @@ function Navebar() {
                     />
                   </svg>
                 </button>
-                <span className="absolute top-0 right-0 inline-flex translate-x-1/2 -translate-y-1/2 transform items-center justify-center rounded-full bg-red-600 px-2 py-1 text-xs leading-none font-bold text-white">
-                  2
-                  {/* <!-- Replace with the actual number of notifications --> */}
-                </span>
+                <UnreadMessageCount />
               </Link>
               {/* <!-- Profile dropdown button --> */}
               <div className="relative ml-3">

@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import AuthProvider from "@/components/AuthProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { GlobalContextProvider } from "@/context/GlobalContext";
 export const metadata = {
   title: "property puls",
   keywords: "renta property, real estate",
@@ -13,14 +14,16 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <AuthProvider>
-      <html lang="en">
-        <body>
-          <Navebar />
-          <main>{children}</main>
-          <Footer />
-          <ToastContainer />
-        </body>
-      </html>
+      <GlobalContextProvider>
+        <html lang="en">
+          <body>
+            <Navebar />
+            <main>{children}</main>
+            <Footer />
+            <ToastContainer />
+          </body>
+        </html>
+      </GlobalContextProvider>
     </AuthProvider>
   );
 }
