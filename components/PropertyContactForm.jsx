@@ -3,8 +3,8 @@ import addMessage from "@/app/actions/addMessage";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useFormState } from "react-dom";
-import { FaPaperPlane } from "react-icons/fa";
 import { toast } from "react-toastify";
+import SubmitMessageButton from "./SubmitMessageButton";
 
 function PropertyContactForm({ property }) {
   const { data: session } = useSession();
@@ -99,12 +99,7 @@ function PropertyContactForm({ property }) {
             ></textarea>
           </div>
           <div>
-            <button
-              className="focus:shadow-outline flex w-full items-center justify-center rounded-full bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-600 focus:outline-none"
-              type="submit"
-            >
-              <FaPaperPlane className="mr-2" /> Send Message
-            </button>
+            <SubmitMessageButton />
           </div>
         </form>
       </div>
