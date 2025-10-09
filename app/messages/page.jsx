@@ -1,10 +1,11 @@
+export const dynamic = "force-dynamic";
 import MessageCard from "@/components/MessageCard";
 import connectDB from "@/config/database";
 import Message from "@/model/Message";
 import "@/model/Property";
 import { convertToSerializeableObject } from "@/utils/convertToObject";
 import getSessionUser from "@/utils/getSessionUser";
-import { useId } from "react";
+
 async function MessagesPage() {
   connectDB();
   const { userId } = await getSessionUser();
