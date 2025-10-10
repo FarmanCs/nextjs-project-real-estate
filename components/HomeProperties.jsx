@@ -6,7 +6,7 @@ async function HomeProperties() {
   await connectDB();
   const properties = await Property.find({})
     .sort({ createdAt: -1 })
-    .limit(5)
+    .limit(8)
     .lean();
 
   return (

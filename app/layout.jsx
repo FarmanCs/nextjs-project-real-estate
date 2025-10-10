@@ -4,7 +4,9 @@ import Footer from "@/components/Footer";
 import AuthProvider from "@/components/AuthProvider";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "photoswipe/dist/photoswipe.css";
 import { GlobalContextProvider } from "@/context/GlobalContext";
+
 export const metadata = {
   title: "property puls",
   keywords: "renta property, real estate",

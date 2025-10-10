@@ -26,14 +26,16 @@ function PropertyCard({ property }) {
   };
   return (
     <div className="relative rounded-xl shadow-md">
-      <Image
-        src={property.images[0]}
-        alt=""
-        className="h-auto w-full rounded-t-xl"
-        width="0"
-        height="0"
-        sizes="100vw"
-      />
+      <Link href={`/properties/${property._id}`}>
+        <Image
+          src={property.images[0]}
+          alt=""
+          className="h-auto w-full rounded-t-xl"
+          width="0"
+          height="0"
+          sizes="100vw"
+        />
+      </Link>
       <div className="p-4">
         <div className="mb-6 text-left md:text-center lg:text-left">
           <div className="text-gray-600">{property.type}</div>

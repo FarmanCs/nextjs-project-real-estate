@@ -1,7 +1,3 @@
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
-export const revalidate = 0;
-
 import MessageCard from "@/components/MessageCard";
 import connectDB from "@/config/database";
 import Message from "@/model/Message";
