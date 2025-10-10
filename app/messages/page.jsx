@@ -9,14 +9,6 @@ async function MessagesPage() {
   await connectDB();
   const session = await getSessionUser();
 
-  if (!session) {
-    return (
-      <section className="flex h-screen items-center justify-center">
-        <p className="text-lg font-semibold">Please log in to view messages.</p>
-      </section>
-    );
-  }
-
   const { userId } = session;
 
   const readMessage = await Message.find({ recipient: userId, read: true })

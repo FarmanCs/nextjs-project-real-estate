@@ -23,7 +23,7 @@ function Navebar() {
       setProviders(res);
     };
     setAuthProviders();
-  }, []);
+  }, [setProviders]);
 
   const path = usePathname();
   return (
