@@ -2,6 +2,7 @@
 
 import Message from "@/model/Message";
 import getSessionUser from "@/utils/getSessionUser";
+import { revalidatePath } from "next/cache";
 
 async function deleteMessage(messageId) {
   const { userId } = await getSessionUser();

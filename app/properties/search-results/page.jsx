@@ -8,7 +8,6 @@ import { FaArrowAltCircleLeft } from "react-icons/fa";
 
 async function SearchResultsPage({ searchParams }) {
   const { location, propertyType } = await searchParams;
-  //   console.log(location, propertyType);
   await connectDB();
   const locationPattern = new RegExp(location, "i");
   let query = {
@@ -27,7 +26,6 @@ async function SearchResultsPage({ searchParams }) {
   }
   const propertiesQueryResults = await Property.find(query).lean();
   const properties = convertToSerializeableObject(propertiesQueryResults);
-  // console.log("properties search:", properties);
   return (
     <>
       <section className="bg-blue-700 py-4">

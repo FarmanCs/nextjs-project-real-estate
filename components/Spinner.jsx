@@ -7,7 +7,6 @@ const cssStyle = {
 };
 
 export default function Spinner() {
-  console.log("Loading page...");
   return (
     <FadeLoader
       color="#283bc7"

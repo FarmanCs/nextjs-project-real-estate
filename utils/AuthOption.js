@@ -36,8 +36,6 @@ export const authOptions = {
             username,
             image: profile.picture,
           });
-
-          console.log(" New user created:", profile.email);
         } else {
           console.log(" Existing user found:", profile.email);
         }

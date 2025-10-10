@@ -13,10 +13,8 @@ async function markMessageAsRead(messageId) {
     return { error: "User ID is required" };
   }
 
-  console.log("messageId:", messageId);
   // Find message in database
   const message = await Message.findById(messageId);
-  console.log("message:", message);
 
   //check the message is their or noth
   if (!message) {

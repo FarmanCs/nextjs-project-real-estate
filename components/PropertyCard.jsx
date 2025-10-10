@@ -8,7 +8,6 @@ import {
   FaMoneyBill,
 } from "react-icons/fa";
 function PropertyCard({ property }) {
-  // console.log("Property card:", property);
   const price = () => {
     const { rates } = property || {};
 

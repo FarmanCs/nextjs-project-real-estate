@@ -12,8 +12,6 @@ const PropertyMap = ({ property }) => {
   const [lng, setLng] = useState(null);
   const [loading, setLoading] = useState(true);
   const [geocodeError, setGeocodeError] = useState(false);
-  // console.log("ENV:", process.env);
-  console.log("GEO MAP api:", process.env.NEXT_PUBLIC_GOOGLE_GEOCODING_API_KEY);
 
   useEffect(() => {
     // Set geocoding defaults
@@ -42,7 +40,6 @@ const PropertyMap = ({ property }) => {
         setLng(lng);
         setLoading(false);
       } catch (error) {
-        console.log(error);
         setGeocodeError(true);
         setLoading(false);
       }

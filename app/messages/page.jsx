@@ -1,37 +1,42 @@
 export const dynamic = "force-dynamic";
 
-import MessageCard from "@/components/MessageCard";
+import mongoose from "mongoose";
 import connectDB from "@/config/database";
 import Message from "@/model/Message";
+import MessageCard from "@/components/MessageCard";
 import "@/model/Property";
 import { convertToSerializeableObject } from "@/utils/convertToObject";
 import getSessionUser from "@/utils/getSessionUser";
-import { redirect } from "next/navigation";
 
-async function MessagesPage() {
+const MessagePage = async () => {
   await connectDB();
-  const session = await getSessionUser();
 
-  // Handle case when there's no session
-  if (!session || !session.userId) {
-    redirect("/login"); // or wherever your login page is
-  }
+  const sessionUser = await getSessionUser();
+  const { userId } = sessionUser;
 
-  const { userId } = session;
+  // Convert string to ObjectId
+  const userObjectId = new mongoose.Types.ObjectId(userId);
 
-  const readMessage = await Message.find({ recipient: userId, read: true })
+  const readMessages = await Message.find({
+    recipient: userObjectId,
+    read: true,
+  })
     .sort({ createdAt: -1 })
     .populate("sender", "username")
     .populate("property", "name")
     .lean();
 
-  const unreadMessage = await Message.find({ recipient: userId, read: false })
+  const unreadMessages = await Message.find({
+    recipient: userObjectId,
+    read: false,
+  })
     .sort({ createdAt: -1 })
     .populate("sender", "username")
     .populate("property", "name")
     .lean();
 
-  const messages = [...readMessage, ...unreadMessage].map((messageDoc) => {
+  // Convert to serializable object so we can pass to client component.
+  const messages = [...unreadMessages, ...readMessages].map((messageDoc) => {
     const message = convertToSerializeableObject(messageDoc);
     message.sender = convertToSerializeableObject(messageDoc.sender);
     message.property = convertToSerializeableObject(messageDoc.property);
@@ -40,15 +45,16 @@ async function MessagesPage() {
 
   return (
     <section className="bg-blue-50">
-      <div className="container m-auto max-w-2xl py-24">
-        <div className="m-4 mb-4 rounded-md border bg-white px-8 py-6 shadow-md md:m-0">
-          <h2 className="mb-4 text-3xl font-bold">Your Messages</h2>
+      <div className="container m-auto max-w-6xl py-24">
+        <div className="m-4 mb-4 rounded-md border bg-white px-6 py-8 shadow-md md:m-0">
+          <h1 className="mb-4 text-3xl font-bold">Your Messages</h1>
+
           <div className="space-y-4">
             {messages.length === 0 ? (
               <p>You have no messages</p>
             ) : (
               messages.map((message) => (
-                <MessageCard message={message} key={message._id} />
+                <MessageCard key={message._id} message={message} />
               ))
             )}
           </div>
@@ -56,6 +62,6 @@ async function MessagesPage() {
       </div>
     </section>
   );
-}
+};
 
-export default MessagesPage;
+export default MessagePage;

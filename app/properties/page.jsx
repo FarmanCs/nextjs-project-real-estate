@@ -8,11 +8,10 @@ import getSessionUser from "@/utils/getSessionUser";
 
 async function PropertiesPage({ searchParams }) {
   const { page = 1, pageSize = 11 } = await searchParams;
-  console.log("searchParams:", page, pageSize);
+
   const { userId } = await getSessionUser();
   await connectDB();
   const skip = (page - 1) * pageSize;
-  console.log("SKIP:", skip);
 
   const totalDoc = await Property.countDocuments({});
 

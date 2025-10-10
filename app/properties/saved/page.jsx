@@ -7,7 +7,6 @@ import getSessionUser from "@/utils/getSessionUser";
 async function SavedPropertiesPage() {
   const { userId } = await getSessionUser();
   const { bookmarks } = await User.findById(userId).populate("bookmarks");
-  console.log("Bookmarks: ", bookmarks);
   return (
     <section className="px-4 py-6">
       <div className="container m-auto px-4 py-4 lg:container">

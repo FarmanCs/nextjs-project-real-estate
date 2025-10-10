@@ -14,11 +14,10 @@ async function ProfilePage() {
   const { userId } = userSession;
 
   if (!userSession || !userSession.userId) {
-    redirect("/login"); // redirects unauthenticated users
+    redirect("/login");
   }
   const propertiesDoc = await Property.find({ owner: userId }).lean();
   const properties = propertiesDoc.map(convertToSerializeableObject);
-  //   console.log("USER PROPERTIES:", properties);
 
   return (
     <section className="bg-blue-50">

@@ -50,8 +50,6 @@ async function addProperty(formData) {
 
     const imageUrls = [];
 
-    console.log(` Uploading ${images.length} images...`);
-
     for (const imageFile of images) {
       const imageBuffer = await imageFile.arrayBuffer();
       const imageArray = Array.from(new Uint8Array(imageBuffer));
