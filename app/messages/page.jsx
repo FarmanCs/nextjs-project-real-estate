@@ -1,13 +1,21 @@
+export const dynamic = "force-dynamic";
+
 import MessageCard from "@/components/MessageCard";
 import connectDB from "@/config/database";
 import Message from "@/model/Message";
 import "@/model/Property";
 import { convertToSerializeableObject } from "@/utils/convertToObject";
 import getSessionUser from "@/utils/getSessionUser";
+import { redirect } from "next/navigation";
 
 async function MessagesPage() {
   await connectDB();
   const session = await getSessionUser();
+
+  // Handle case when there's no session
+  if (!session || !session.userId) {
+    redirect("/login"); // or wherever your login page is
+  }
 
   const { userId } = session;
 
